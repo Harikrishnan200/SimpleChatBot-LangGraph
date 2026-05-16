@@ -8,12 +8,12 @@ from langchain_ollama.llms import OllamaLLM
 
 
 # Step 1: Define State
-class State(Dict):
-    messages: List[Dict[str, str]]  
+class State(Dict):  # chat bot memory
+    messages: List[Dict[str, str]]    # A list of messages, where each message is a dictionary with "role" (either "user" or "assistant") and "content" (the text of the message). This structure allows us to keep track of the conversation history, which is essential for maintaining context in a chatbot interaction.
 
 
 # Step 2: Initialize StateGraph
-graph_builder = StateGraph(State)
+graph_builder = StateGraph(State)  # Initialize StateGraph with the defined State. This stage graph is the state machine that will manage the flow of the conversation. It will keep track of the messages exchanged between the user and the assistant, allowing us to maintain context throughout the interaction.
 
 # Initialize the LLM  
 # llm = OllamaLLM(model="llama3")
@@ -29,10 +29,13 @@ def chatbot(state: State):
 
 
 # Add nodes and edges
+# add_node fn is used for adding a node to the graph. The first argument is the name of the node, and the second argument is the function that will be executed when that node is reached in the graph. In this case, we are adding a node named "chatbot" that will execute the chatbot function we defined earlier.
 graph_builder.add_node("chatbot", chatbot)
-graph_builder.add_edge(START, "chatbot")
+graph_builder.add_edge(START, "chatbot")  # we need the starting point of the graph to be the chatbot node, so we add an edge from START to "chatbot". This means that when the graph execution begins, it will start at the "chatbot" node.
 graph_builder.add_edge("chatbot", END)
 
+# workflow:
+# start -> chatbot -> end
 
 # Compile the graph
 graph = graph_builder.compile()
