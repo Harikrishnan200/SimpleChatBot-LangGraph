@@ -9,7 +9,7 @@ from langchain_ollama.llms import OllamaLLM
 
 # Step 1: Define State
 class State(Dict):
-    messages: List[Dict[str, str]] 
+    messages: List[Dict[str, str]]  
 
 
 # Step 2: Initialize StateGraph
